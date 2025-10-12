@@ -70,7 +70,7 @@ class DB {
 
     $sql = "INSERT INTO " . static::$tabla . " ($campos) VALUES ($placeholders);";
     self::query($sql, $valores);
-    
+
     return self::$db->insert_id;
   }
 
@@ -85,7 +85,7 @@ class DB {
     $valores = array_values($columns);
     $valores[] = $id;
     self::query($sql, $valores);
-    
+
     return self::$db->affected_rows > 0;
   }
 
