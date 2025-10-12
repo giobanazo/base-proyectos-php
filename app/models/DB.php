@@ -62,6 +62,36 @@ class DB {
     return $result->fetch_all(MYSQLI_ASSOC);
   }
 
+  public static function whereMultiple(array $conditions = [], string $logic = 'AND', array $columns = ['*']): array {
+    $cols = implode(',', $columns);
+    $whereClauses = [];
+    $params = [];
+
+    foreach ($conditions as $column => $value) {
+      if (is_array($value)) {
+        [$operator, $val] = $value;
+
+        if ($operator === 'IN') {
+          $placeholders = implode(',', array_fill(0, count($val), '?'));
+          $whereClauses[] = "$column IN ($placeholders)";
+          $params = array_merge($params, $val);
+        } else {
+          $whereClauses[] = "$column $operator ?";
+          $params[] = $val;
+        }
+      } else {
+        $whereClauses[] = "$column = ?";
+        $params[] = $value;
+      }
+    }
+
+    $where = implode(" $logic ", $whereClauses);
+    $sql = "SELECT $cols FROM " . static::$tabla . " WHERE $where;";
+
+    $result = self::query($sql, $params);
+    return $result->fetch_all(MYSQLI_ASSOC);
+  }
+
   public static function find(int | string $id, array $columns = [], string $keyId = 'id'): ?array {
     $columnas = $columns == [] ? '*' : implode(',', $columns);
 
