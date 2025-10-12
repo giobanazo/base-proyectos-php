@@ -53,6 +53,15 @@ class DB {
     return $result->fetch_all(MYSQLI_ASSOC);
   }
 
+  public static function where(int | string $value, array $columns = [], string $keyId = 'id', string $operator = '='): array {
+    $columnas = $columns == [] ? '*' : implode(',', $columns);
+
+    $sql = "SELECT $columnas FROM " . static::$tabla . " WHERE $keyId $operator ?;";
+    $result = self::query($sql, [$value]);
+    
+    return $result->fetch_all(MYSQLI_ASSOC);
+  }
+
   public static function find(int | string $id, array $columns = [], string $keyId = 'id'): ?array {
     $columnas = $columns == [] ? '*' : implode(',', $columns);
 
