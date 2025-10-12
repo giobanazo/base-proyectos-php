@@ -1,0 +1,98 @@
+<?php
+class DB {
+  protected static $db;
+  protected static $tabla;
+
+  public static function initDB(): void {
+    self::$db = mysqli_connect(
+      ENV::get('DB_HOST', 'localhost'),
+      ENV::get('DB_USER', 'root'),
+      ENV::get('DB_PASS', ''),
+      ENV::get('DB_NAME', 'pruebas'),
+    );
+
+    if (!self::$db) {
+      echo "Error: No se pudo conectar a MySQL.";
+      echo "errno de depuración: " . mysqli_connect_errno();
+      echo "error de depuración: " . mysqli_connect_error();
+      exit;
+    };
+  }
+
+  private static function query(string $sql, array $params = [], string $types = ''): mysqli_result|bool {
+    $stmt = self::$db->prepare($sql);
+
+    if (!$stmt) {
+      die("Error en prepare: " . self::$db->error . "\nSQL: " . $sql);
+    }
+
+    if (!empty($params)) {
+      if (empty($types)) {
+        $types = '';
+        foreach ($params as $param) {
+          $types .= is_int($param) ? 'i' : (is_float($param) ? 'd' : 's');
+        }
+      }
+
+      $stmt->bind_param($types, ...$params);
+    }
+
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+
+    return $result;
+  }
+
+  public static function all(string $orderBy = 'id', string $order = 'ASC', array $columns = []): array {
+    $columnas = $columns == [] ? '*' : implode(',', $columns);
+
+    $sql = "SELECT $columnas FROM " . static::$tabla . " ORDER BY $orderBy $order;";
+    $result = self::query($sql);
+
+    return $result->fetch_all(MYSQLI_ASSOC);
+  }
+
+  public static function find(int | string $id, array $columns = [], string $keyId = 'id'): ?array {
+    $columnas = $columns == [] ? '*' : implode(',', $columns);
+
+    $sql = "SELECT $columnas FROM " . static::$tabla . " WHERE $keyId = ? LIMIT 1;";
+    $result = self::query($sql, [$id]);
+
+    $row = $result->fetch_assoc();
+    return $row ?: null;
+  }
+
+  public static function create(array $columns): int {
+    $campos = implode(', ', array_keys($columns));
+    $valores = array_values($columns);
+    $placeholders = implode(', ', array_fill(0, count($columns), '?'));
+
+    $sql = "INSERT INTO " . static::$tabla . " ($campos) VALUES ($placeholders);";
+    self::query($sql, $valores);
+    
+    return self::$db->insert_id;
+  }
+
+  public static function update(int | string $id, array $columns = [], string $keyId = 'id'): bool {
+    $campos = [];
+    foreach (array_keys($columns) as $campo) {
+      $campos[] = "$campo = ?";
+    }
+
+    $sql = 'UPDATE ' . static::$tabla . ' SET ' . implode(', ', $campos) . " WHERE $keyId = ?;";
+
+    $valores = array_values($columns);
+    $valores[] = $id;
+    self::query($sql, $valores);
+    
+    return self::$db->affected_rows > 0;
+  }
+
+  public static function delete(int | string $id, string $keyId = 'id'): bool {
+    $sql = 'DELETE FROM ' . static::$tabla . " WHERE $keyId = ?;";
+    self::query($sql, [$id]);
+
+    return self::$db->affected_rows > 0;
+  }
+}
