@@ -58,7 +58,7 @@ class DB {
 
     $sql = "SELECT $columnas FROM " . static::$tabla . " WHERE $keyId $operator ?;";
     $result = self::query($sql, [$value]);
-    
+
     return $result->fetch_all(MYSQLI_ASSOC);
   }
 
