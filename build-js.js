@@ -20,7 +20,7 @@ const terserOptions = {
     evaluate: true,               // Evaluar expresiones constantes
     booleans: true,               // Optimizar booleanos
     loops: true,                  // Optimizar loops
-    unused: true,                 // Eliminar variables no usadas
+    unused: false,                // Eliminar variables no usadas
     hoist_funs: true,             // Hoisting de funciones
     hoist_vars: false,            // No hoist variables
     if_return: true,              // Optimizar if-return
@@ -34,7 +34,6 @@ const terserOptions = {
     unsafe_undefined: true        // Undefined unsafe
   },
   mangle: {
-    reserved: ['restFetch', 'formatearMoneda', 'formatearMonedaInput'], // Funciones globales, al momento de mimificar no se modifica su nombre
     toplevel: true,               // Mangle nombres top-level
     eval: true,                   // Mangle nombres en eval
     properties: {                 // Mangle propiedades
