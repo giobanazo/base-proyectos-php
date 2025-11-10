@@ -5,6 +5,10 @@
   "main": "index.js",
   "author": "",
   "license": "ISC",
+  "scripts": {
+    "build:js": "node build-js.js",
+    "build:css": "node build-css.js"
+  },
   "devDependencies": {
     "concurrently": "^8.2.2",
     "cssnano": "^7.1.1",
