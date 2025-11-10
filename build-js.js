@@ -34,7 +34,7 @@ const terserOptions = {
     unsafe_undefined: true        // Undefined unsafe
   },
   mangle: {
-    reserved: ['restFetch', 'formatoFecha', 'formatearMiles', 'formatoMonetario'], // Funciones globales, al momento de mimificar no se modifica su nombre
+    reserved: ['restFetch', 'formatearMoneda', 'formatearMonedaInput'], // Funciones globales, al momento de mimificar no se modifica su nombre
     toplevel: true,               // Mangle nombres top-level
     eval: true,                   // Mangle nombres en eval
     properties: {                 // Mangle propiedades
