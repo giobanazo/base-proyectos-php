@@ -7,10 +7,10 @@ const { glob } = require('glob');
 const terserOptions = {
   compress: {
     passes: 3,                    // 3 pasadas de optimización
-    drop_console: true,           // Eliminar console.log
+    // drop_console: true,           // Eliminar console.log
     drop_debugger: true,          // Eliminar debugger
     pure_funcs: [                 // Funciones a eliminar
-      'console.log',
+      // 'console.log',
       'console.info',
       'console.debug',
       'console.warn'
