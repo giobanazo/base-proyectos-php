@@ -1,10 +1,8 @@
 <?php
-class Router
-{
+class Router {
   private array $routes = [];
 
-  private function addRoute(string $httpMethod, string $url, array $fn): void
-  {
+  private function addRoute(string $httpMethod, string $url, array $fn): void {
     $this->routes[] = [
       'method' => $httpMethod,
       'url' => $url,
@@ -12,26 +10,22 @@ class Router
     ];
   }
 
-  public function get(string $url, array $fn): void
-  {
+  public function get(string $url, array $fn): void {
     $this->addRoute('GET', $url, $fn);
   }
 
-  public function post(string $url, array $fn): void
-  {
+  public function post(string $url, array $fn): void {
     $this->addRoute('POST', $url, $fn);
   }
 
-  private function convertToRegex(string $url): string
-  {
+  private function convertToRegex(string $url): string {
     $pattern = preg_replace('/\{([a-zA-Z0-9_]+)\}/', '([a-zA-Z0-9_-]+)', $url);
     return '#^' . $pattern . '$#';
   }
 
-  public function comprobarRutas(): void
-  {
+  public function comprobarRutas(): void {
     $method = $_SERVER['REQUEST_METHOD'];
-    $urlActual = $_SERVER['PATH_INFO'] ?? '/';
+    $urlActual = $_SERVER['REQUEST_URI'] ?? '/';
 
     foreach ($this->routes as $route) {
       if ($route['method'] !== $method) continue;
@@ -46,11 +40,10 @@ class Router
     }
 
     http_response_code(404);
-    $this->render('templates/404', [], false);
+    $this->render('pages/404', [], false);
   }
 
-  public function render(string $view, array $datos = [], bool $layout = true): void
-  {
+  public function render(string $view, array $datos = [], bool $layout = true): void {
     foreach ($datos as $key => $value) {
       $$key = $value;
     }
@@ -63,11 +56,5 @@ class Router
     } else {
       include_once __DIR__ . "/app/views/$view.php";
     }
-  }
-
-  public function redirect(string $url): void
-  {
-    header("Location: $url");
-    exit;
   }
 }
