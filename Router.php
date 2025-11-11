@@ -1,13 +1,20 @@
 <?php
 class Router {
   private array $routes = [];
+  private array $apiRoutes = [];
 
-  private function addRoute(string $httpMethod, string $url, array $fn): void {
-    $this->routes[] = [
+  private function addRoute(string $httpMethod, string $url, array $fn, bool $isApi = false): void {
+    $route = [
       'method' => $httpMethod,
       'url' => $url,
       'fn' => $fn,
     ];
+
+    if ($isApi) {
+      $this->apiRoutes[] = $route;
+    } else {
+      $this->routes[] = $route;
+    }
   }
 
   public function get(string $url, array $fn): void {
@@ -18,6 +25,24 @@ class Router {
     $this->addRoute('POST', $url, $fn);
   }
 
+  // Rutas API
+  public function apiGet(string $url, array $fn): void {
+    $this->addRoute('GET', $url, $fn, true);
+  }
+  
+  public function apiPost(string $url, array $fn): void {
+    $this->addRoute('POST', $url, $fn, true);
+  }
+  
+  public function apiPut(string $url, array $fn): void {
+    $this->addRoute('PUT', $url, $fn, true);
+  }
+  
+  public function apiDelete(string $url, array $fn): void {
+    $this->addRoute('DELETE', $url, $fn, true);
+  }
+
+
   private function convertToRegex(string $url): string {
     $pattern = preg_replace('/\{([a-zA-Z0-9_]+)\}/', '([a-zA-Z0-9_-]+)', $url);
     return '#^' . $pattern . '$#';
@@ -27,20 +52,38 @@ class Router {
     $method = $_SERVER['REQUEST_METHOD'];
     $urlActual = $_SERVER['REQUEST_URI'] ?? '/';
 
-    foreach ($this->routes as $route) {
-      if ($route['method'] !== $method) continue;
-
-      $pattern = $this->convertToRegex($route['url']);
-
-      if (preg_match($pattern, $urlActual, $matches)) {
-        array_shift($matches);
-        call_user_func_array($route['fn'], [$this, $matches]);
-        return;
+    // Primero buscar en rutas API
+    $isApiRoute = $this->matchRoute($this->apiRoutes, $method, $urlActual, true);
+    
+    // Si no es API, buscar en rutas normales
+    if (!$isApiRoute) {
+      $isNormalRoute = $this->matchRoute($this->routes, $method, $urlActual);
+      
+      if (!$isNormalRoute) {
+        http_response_code(404);
+        $this->render('pages/404', [], false);
       }
     }
+  }
 
-    http_response_code(404);
-    $this->render('pages/404', [], false);
+  private function matchRoute(array $routes, string $method, string $url, bool $isApi = false): bool {
+    foreach ($routes as $route) {
+      if ($route['method'] !== $method) continue;
+      
+      $pattern = $this->convertToRegex($route['url']);
+      if (preg_match($pattern, $url, $matches)) {
+        array_shift($matches);
+        
+        // Si es API, establecer headers JSON
+        if ($isApi) {
+          header('Content-Type: application/json; charset=utf-8');
+        }
+        
+        call_user_func_array($route['fn'], [$this, $matches]);
+        return true;
+      }
+    }
+    return false;
   }
 
   public function render(string $view, array $datos = [], bool $layout = true): void {
