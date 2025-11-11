@@ -19,4 +19,8 @@ class API {
     $result ? self::send('OK', $result) : self::send('ERROR', 'NOT_FOUND');
   }
   */
+
+  public static function obtenerDatos(Router $Router, array $params): void {
+    self::send('OK', ['mensaje' => 'Obteniendo datos de la base de datos...']);
+  }
 }

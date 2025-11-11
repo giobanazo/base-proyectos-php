@@ -18,4 +18,6 @@ $Router = new Router();
 $Router->get('/login', [Auth::class, 'login']);
 $Router->post('/login', [Auth::class, 'login']);
 
+$Router->apiGet('/api/datos', [API::class, 'obtenerDatos']);
+
 $Router->comprobarRutas();
