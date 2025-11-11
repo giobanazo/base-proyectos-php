@@ -15,6 +15,8 @@ spl_autoload_register(function ($class) {
 
 $Router = new Router();
 
+$Router->get('/', [Home::class, 'index']);
+
 $Router->get('/login', [Auth::class, 'login']);
 $Router->post('/login', [Auth::class, 'login']);
 
