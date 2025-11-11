@@ -17,3 +17,18 @@ function limpiarFormatoMoneda(string $valor): string {
 function formatearFecha(string $fecha): string {
   return date('d-m-Y', strtotime($fecha));
 }
+
+function setFlash(string $tipo, string $mensaje): void {
+  $_SESSION['flash'] = [
+    'tipo' => $tipo,
+    'mensaje' => $mensaje
+  ];
+}
+
+function getFlash(): array|null {
+  if (!isset($_SESSION['flash'])) return null;
+
+  $flash = $_SESSION['flash'];
+  unset($_SESSION['flash']);
+  return $flash;
+}
