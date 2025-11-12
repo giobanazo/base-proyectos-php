@@ -9,6 +9,7 @@ class DB {
       ENV::get('DB_USER', 'root'),
       ENV::get('DB_PASS', ''),
       ENV::get('DB_NAME', 'pruebas'),
+      ENV::get('DB_PORT', '3306')
     );
 
     if (!self::$db) {
@@ -19,7 +20,7 @@ class DB {
     };
   }
 
-  private static function query(string $sql, array $params = [], string $types = ''): mysqli_result|bool {
+  protected static function query(string $sql, array $params = [], string $types = ''): mysqli_result|int {
     $stmt = self::$db->prepare($sql);
 
     if (!$stmt) {
@@ -38,10 +39,16 @@ class DB {
     }
 
     $stmt->execute();
-    $result = $stmt->get_result();
-    $stmt->close();
 
-    return $result;
+    $result = $stmt->get_result();
+    if ($result instanceof mysqli_result) {
+      $stmt->close();
+      return $result;
+    }
+
+    $affected = $stmt->affected_rows;
+    $stmt->close();
+    return $affected;
   }
 
   public static function all(string $orderBy = 'id', string $order = 'ASC', array $columns = []): array {
@@ -108,9 +115,7 @@ class DB {
     $placeholders = implode(', ', array_fill(0, count($columns), '?'));
 
     $sql = "INSERT INTO " . static::$tabla . " ($campos) VALUES ($placeholders);";
-    self::query($sql, $valores);
-
-    return self::$db->insert_id;
+    return self::query($sql, $valores);
   }
 
   public static function update(int | string $id, array $columns = [], string $keyId = 'id'): bool {
@@ -123,15 +128,15 @@ class DB {
 
     $valores = array_values($columns);
     $valores[] = $id;
-    self::query($sql, $valores);
+    $result = self::query($sql, $valores);
 
-    return self::$db->affected_rows > 0;
+    return $result > 0;
   }
 
   public static function delete(int | string $id, string $keyId = 'id'): bool {
     $sql = 'DELETE FROM ' . static::$tabla . " WHERE $keyId = ?;";
-    self::query($sql, [$id]);
+    $result = self::query($sql, [$id]);
 
-    return self::$db->affected_rows > 0;
+    return $result > 0;
   }
 }

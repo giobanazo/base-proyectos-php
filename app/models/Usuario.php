@@ -1,10 +1,8 @@
 <?php
 class Usuario extends DB {
-  protected static $tabla = 'usuarios';
+  protected static $tabla = 'ingresos';
 
-  public static function saludar(string $nombre): string {
-
-    return "Hola usuario $nombre, como estas?";
-
+  public static function getIngresos(): array {
+    return self::all();
   }
 }
