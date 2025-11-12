@@ -51,8 +51,8 @@ class DB {
     return $affected;
   }
 
-  public static function all(string $orderBy = 'id', string $order = 'ASC', array $columns = []): array {
-    $columnas = $columns == [] ? '*' : implode(',', $columns);
+  public static function all(string $orderBy = 'id', string $order = 'ASC', array $columns = ['*']): array {
+    $columnas = implode(',', $columns);
 
     $sql = "SELECT $columnas FROM " . static::$tabla . " ORDER BY $orderBy $order;";
     $result = self::query($sql);
@@ -60,8 +60,8 @@ class DB {
     return $result->fetch_all(MYSQLI_ASSOC);
   }
 
-  public static function where(int | string $value, array $columns = [], string $keyId = 'id', string $operator = '='): array {
-    $columnas = $columns == [] ? '*' : implode(',', $columns);
+  public static function where(int | string $value, array $columns = ['*'], string $keyId = 'id', string $operator = '='): array {
+    $columnas = implode(',', $columns);
 
     $sql = "SELECT $columnas FROM " . static::$tabla . " WHERE $keyId $operator ?;";
     $result = self::query($sql, [$value]);
@@ -99,8 +99,8 @@ class DB {
     return $result->fetch_all(MYSQLI_ASSOC);
   }
 
-  public static function find(int | string $id, array $columns = [], string $keyId = 'id'): ?array {
-    $columnas = $columns == [] ? '*' : implode(',', $columns);
+  public static function find(int | string $id, array $columns = ['*'], string $keyId = 'id'): ?array {
+    $columnas = implode(',', $columns);
 
     $sql = "SELECT $columnas FROM " . static::$tabla . " WHERE $keyId = ? LIMIT 1;";
     $result = self::query($sql, [$id]);
