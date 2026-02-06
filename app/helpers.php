@@ -1,9 +1,9 @@
 <?php
-function debuguear($variable): string {
+function debuguear(mixed $variable): string {
   echo "<pre>";
   var_dump($variable);
   echo "</pre>";
-  exit;
+  exit();
 }
 
 function formatearMoneda(int|float|string $valor): string {
