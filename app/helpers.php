@@ -34,7 +34,7 @@ function formatearFecha(string $fecha): string {
 }
 
 function setFlash(string $tipo, string $mensaje): void {
-  $_SESSION['flash'] = [
+  $_SESSION['flash'][] = [
     'tipo' => $tipo,
     'mensaje' => $mensaje
   ];
