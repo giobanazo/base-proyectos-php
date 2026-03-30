@@ -7,7 +7,7 @@ class DB {
     self::$db = mysqli_connect(
       ENV::get('DB_HOST', 'localhost'),
       ENV::get('DB_USER', 'root'),
-      ENV::get('DB_PASS', ''),
+      ENV::get('DB_PASS', '123'),
       ENV::get('DB_NAME', 'pruebas'),
       ENV::get('DB_PORT', '3306')
     );
