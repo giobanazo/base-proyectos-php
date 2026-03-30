@@ -6,6 +6,11 @@ function debuguear(mixed $variable): string {
   exit();
 }
 
+function redirect($url) {
+  header("Location: $url");
+  exit();
+}
+
 function formatearMoneda(int|float|string $valor): string {
   return number_format($valor, 0, ',', '.');
 }
