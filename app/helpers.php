@@ -11,6 +11,16 @@ function redirect($url) {
   exit();
 }
 
+function setearCookie(string $name, mixed $value, int $expires, string $path = '/'): void {
+  setcookie($name, $value, [
+    'expires' => $expires,
+    'path' => $path,
+    'secure' => ENV::get('COOKIE_SECURE', 'false') === 'true',
+    'httponly' => ENV::get('COOKIE_HTTPONLY', 'true') === 'true',
+    'samesite' => ENV::get('COOKIE_SECURE', 'false') === 'true' ? 'Strict' : 'Lax'
+  ]);
+}
+
 function formatearMoneda(int|float|string $valor): string {
   return number_format($valor, 0, ',', '.');
 }
