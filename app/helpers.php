@@ -47,3 +47,17 @@ function getFlash(): array|null {
   unset($_SESSION['flash']);
   return $flash;
 }
+
+function exportarXLS(string $filename, string $content, bool $download = true): void {
+  $disposition = $download ? 'attachment' : 'inline';
+
+  header("Content-Type: application/vnd.ms-excel; charset=UTF-8");
+  header("Content-Disposition: $disposition; filename=$filename.xls");
+  header("Pragma: no-cache");
+  header("Expires: 0");
+
+  echo "\xEF\xBB\xBF";
+  echo $content;
+
+  exit();
+}
