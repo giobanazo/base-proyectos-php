@@ -101,11 +101,19 @@ class DB {
     return $result->fetch_all(MYSQLI_ASSOC);
   }
 
-  public static function find(int | string $id, array $columns = ['*'], string $keyId = 'id'): ?array {
+  public static function find(int | string $id, array $columns = ['*'], string $keyId = 'id', ?string $userColumn = null, ?int $userId = null): ?array {
     $columnas = implode(',', $columns);
 
-    $sql = "SELECT $columnas FROM " . static::$tabla . " WHERE $keyId = ? LIMIT 1;";
-    $result = self::query($sql, [$id]);
+    $sql = "SELECT $columnas FROM " . static::$tabla . " WHERE $keyId = ?";
+    $valores = [$id];
+
+    if ($userColumn && $userId !== null) {
+      $sql .= " AND $userColumn = ?";
+      $valores[] = $userId;
+    }
+
+    $sql .= ' LIMIT 1;';
+    $result = self::query($sql, $valores);
 
     $row = $result->fetch_assoc();
     return $row ?: null;
@@ -120,24 +128,36 @@ class DB {
     return self::query($sql, $valores);
   }
 
-  public static function update(int | string $id, array $columns = [], string $keyId = 'id'): bool {
+  public static function update(int | string $id, array $columns = [], string $keyId = 'id', ?string $userColumn = null, ?int $userId = null): bool {
     $campos = [];
     foreach (array_keys($columns) as $campo) {
       $campos[] = "$campo = ?";
     }
 
-    $sql = 'UPDATE ' . static::$tabla . ' SET ' . implode(', ', $campos) . " WHERE $keyId = ?;";
-
+    $sql = 'UPDATE ' . static::$tabla . ' SET ' . implode(', ', $campos) . " WHERE $keyId = ?";
     $valores = array_values($columns);
     $valores[] = $id;
+
+    if ($userColumn && $userId !== null) {
+      $sql .= " AND $userColumn = ?;";
+      $valores[] = $userId;
+    }
+
     $result = self::query($sql, $valores);
 
     return $result > 0;
   }
 
-  public static function delete(int | string $id, string $keyId = 'id'): bool {
-    $sql = 'DELETE FROM ' . static::$tabla . " WHERE $keyId = ?;";
-    $result = self::query($sql, [$id]);
+  public static function delete(int | string $id, string $keyId = 'id', ?string $userColumn = null, ?int $userId = null): bool {
+    $sql = 'DELETE FROM ' . static::$tabla . " WHERE $keyId = ?";
+    $valores = [$id];
+
+    if ($userColumn && $userId !== null) {
+      $sql .= " AND $userColumn = ?;";
+      $valores[] = $userId;
+    }
+
+    $result = self::query($sql, $valores);
 
     return $result > 0;
   }
