@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 class DB {
   protected static $db;
   protected static $tabla;
@@ -9,7 +11,7 @@ class DB {
       ENV::get('DB_USER', 'root'),
       ENV::get('DB_PASS', '123'),
       ENV::get('DB_NAME', 'pruebas'),
-      ENV::get('DB_PORT', '3306')
+      ENV::get('DB_PORT', 3306)
     );
 
     if (!self::$db) {

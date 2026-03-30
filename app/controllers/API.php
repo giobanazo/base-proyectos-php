@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 class API {
   private static function send(string $status, string|array $response): void {
     echo json_encode(['status' => $status, 'response' => $response]);

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 function debuguear(mixed $variable): string {
   echo "<pre>";
   var_dump($variable);
