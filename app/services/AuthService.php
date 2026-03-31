@@ -14,4 +14,41 @@ class AuthService {
 
     setearCookie('remember_token', $token, $oneMonthInUnix);
   }
+
+  public static function login(string $usuario, string $password, bool $recordarme = false): array {
+    $validation = Usuario::validateLogin(['usuario' => $usuario, 'password' => $password]);
+
+    if (!$validation['valid']) {
+      return [
+        'exitoso' => false,
+        'mensajes' => $validation['mensajes']
+      ];
+    }
+
+    $usuarioValido = Usuario::findByCredentials($validation['datos']['usuario'], $validation['datos']['password']);
+
+    if (!$usuarioValido) {
+      return [
+        'exitoso' => false,
+        'mensajes' => ['Usuario o contraseña incorrectos']
+      ];
+    }
+
+    $_SESSION['user'] = [
+      'id' => $usuarioValido['id'],
+      'nombre' => $usuarioValido['nombre'],
+      'usuario' => $usuarioValido['usuario'],
+      'email' => $usuarioValido['email'],
+    ];
+
+    if ($recordarme) {
+      self::crearRememberToken($usuarioValido['id']);
+    }
+
+    return [
+      'exitoso' => true,
+      'mensajes' => ['Sesión iniciada correctamente']
+    ];
+  }
+
 }
