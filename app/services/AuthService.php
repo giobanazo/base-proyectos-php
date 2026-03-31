@@ -71,4 +71,12 @@ class AuthService {
     setearCookie('remember_token', '', time() - 3600);
     return false;
   }
+
+  public static function requireAuth(): void {
+    if (!self::isAuthenticated()) {
+      setFlash('danger', 'Debes iniciar sesión');
+      redirect('/login');
+    }
+  }
+
 }
