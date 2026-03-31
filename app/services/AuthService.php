@@ -51,4 +51,24 @@ class AuthService {
     ];
   }
 
+  public static function isAuthenticated(): bool {
+    if (isset($_SESSION['user']) && !empty($_SESSION['user']['id'])) return true;
+
+    if (isset($_COOKIE['remember_token'])) {
+      $usuario = UserRememberToken::verificarToken(hash('sha256', $_COOKIE['remember_token']));
+
+      if ($usuario) {
+        $_SESSION['user'] = [
+          'id' => $usuario['id'],
+          'nombre' => $usuario['nombre'],
+          'usuario' => $usuario['usuario'],
+          'email' => $usuario['email'],
+        ];
+        return true;
+      }
+    }
+
+    setearCookie('remember_token', '', time() - 3600);
+    return false;
+  }
 }
