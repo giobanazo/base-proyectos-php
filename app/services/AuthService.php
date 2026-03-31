@@ -79,4 +79,9 @@ class AuthService {
     }
   }
 
+  public static function requireGuest(): void {
+    if (self::isAuthenticated()) {
+      redirect('/');
+    }
+  }
 }
