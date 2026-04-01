@@ -33,6 +33,7 @@ $Router->get('/', [Home::class, 'index']);
 
 $Router->get('/login', [Auth::class, 'login']);
 $Router->post('/login', [Auth::class, 'login']);
+$Router->get('/logout', [Auth::class, 'logout']);
 
 $Router->apiGet('/api/datos', [API::class, 'obtenerDatos']);
 
