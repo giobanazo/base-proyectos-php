@@ -7,4 +7,10 @@ class Auth {
   public static function login(Router $Router, array $params): void {
     $Router->render('pages/login', [], false);
   }
+
+  public static function logout(): void {
+    AuthService::requireAuth();
+    AuthService::logout();
+    redirect('/login');
+  }
 }
