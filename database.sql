@@ -1,0 +1,27 @@
+CREATE DATABASE pruebas;
+
+
+USE pruebas;
+
+
+CREATE TABLE usuarios(
+  id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  usuario VARCHAR(30) NOT NULL,
+  nombre VARCHAR(60) NOT NULL,
+  email VARCHAR(100) NOT NULL,
+  password VARCHAR(60) NOT NULL,
+  created_at DATETIME NOT NULL
+) ENGINE=INNODB;
+
+
+CREATE TABLE user_remember_tokens(
+  id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  token_hash VARCHAR(64) NOT NULL,
+  user_agent VARCHAR(255) NOT NULL,
+  ip_address VARCHAR(45) NOT NULL,
+  expires_at DATETIME NOT NULL,
+  created_at DATETIME NOT NULL,
+  id_usuario INT NOT NULL,
+
+  CONSTRAINT fk_usuario FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE
+) ENGINE=INNODB;
