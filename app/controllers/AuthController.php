@@ -4,7 +4,7 @@ require_once __DIR__ . '/../services/AuthService.php';
 
 require_once __DIR__ . '/../models/Usuario.php';
 
-class Auth {
+class AuthController {
   public static function login(Router $Router, array $params): void {
     $Router->render('pages/login', [], false);
   }
