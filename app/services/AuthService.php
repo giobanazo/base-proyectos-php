@@ -84,4 +84,16 @@ class AuthService {
       redirect('/');
     }
   }
+
+  public static function logout(): void {
+    $token = $_COOKIE['remember_token'] ?? null;
+
+    if ($token) {
+      UserRememberToken::delete(hash('sha256', $token), 'token_hash');
+    }
+
+    setearCookie('remember_token', '', time() - 3600);
+    $_SESSION = [];
+    session_destroy();
+  }
 }
