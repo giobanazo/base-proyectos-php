@@ -29,12 +29,12 @@ spl_autoload_register(function ($class) {
 
 $Router = new Router();
 
-$Router->get('/', [Home::class, 'index']);
+$Router->get('/', [HomeController::class, 'index']);
 
-$Router->get('/login', [Auth::class, 'login']);
-$Router->post('/login', [Auth::class, 'login']);
-$Router->get('/logout', [Auth::class, 'logout']);
+$Router->get('/login', [AuthController::class, 'login']);
+$Router->post('/login', [AuthController::class, 'login']);
+$Router->get('/logout', [AuthController::class, 'logout']);
 
-$Router->apiGet('/api/datos', [API::class, 'obtenerDatos']);
+$Router->apiGet('/api/datos', [APIController::class, 'obtenerDatos']);
 
 $Router->comprobarRutas();
