@@ -61,6 +61,9 @@
               </div>
             </form>
 
+            <div class="mt-4 text-center">
+              <p>¿No tienes cuenta? <a href="">Crear cuenta</a></p>
+            </div>
           </div>
         </div>
 
