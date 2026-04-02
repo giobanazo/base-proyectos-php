@@ -36,6 +36,8 @@ $Router->get('/login', [AuthController::class, 'login']);
 $Router->post('/login', [AuthController::class, 'authenticate']);
 $Router->get('/logout', [AuthController::class, 'logout']);
 
+$Router->get('/register', [AuthController::class, 'register']);
+
 $Router->apiGet('/api/datos', [APIController::class, 'obtenerDatos']);
 
 $Router->comprobarRutas();

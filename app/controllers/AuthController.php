@@ -30,4 +30,10 @@ class AuthController {
     AuthService::logout();
     redirect('/login');
   }
+
+  public static function register(Router $Router): void {
+  
+
+    $Router->render('/pages/register', [], false);
+  }
 }
