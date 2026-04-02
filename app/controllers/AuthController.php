@@ -9,6 +9,22 @@ class AuthController {
     $Router->render('pages/login', [], false);
   }
 
+  public static function authenticate(Router $Router, array $params): void {
+    AuthService::requireGuest();
+    $resultado = AuthService::login($_POST['usuario'] ?? '', $_POST['password'] ?? '', isset($_POST['recordarme']));
+
+    if ($resultado['exitoso']) {
+      setFlash('success', $resultado['mensajes'][0]);
+      header('Location: /');
+    } else {
+      foreach ($resultado['mensajes'] as $mensaje) {
+        setFlash('danger', $mensaje);
+      }
+      header('Location: /login');
+    }
+    exit();
+  }
+
   public static function logout(): void {
     AuthService::requireAuth();
     AuthService::logout();

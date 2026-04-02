@@ -40,19 +40,19 @@
               </div>
             <?php endif ?>
 
-            <form>
+            <form action="/login" method="POST">
               <div class="mb-3">
                 <label for="usuario" class="form-label">Usuario</label>
-                <input type="text" class="form-control" id="usuario" placeholder="Ingresa tu usuario" autocomplete="username" />
+                <input type="text" name="usuario" class="form-control" id="usuario" placeholder="Ingresa tu usuario" required />
               </div>
 
               <div class="mb-3">
-                <label for="contrasena" class="form-label">Contraseña</label>
-                <input type="password" class="form-control" id="contrasena" placeholder="Ingresa tu contraseña" autocomplete="current-password" />
+                <label for="password" class="form-label">Contraseña</label>
+                <input type="password" name="password" class="form-control" id="password" placeholder="Ingresa tu contraseña" required />
               </div>
 
               <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="recordarme" />
+                <input type="checkbox" name="recordarme" class="form-check-input" id="recordarme" />
                 <label class="form-check-label" for="recordarme">Recordarme</label>
               </div>
 

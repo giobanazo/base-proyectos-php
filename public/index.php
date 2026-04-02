@@ -33,7 +33,7 @@ $Router = new Router();
 $Router->get('/', [HomeController::class, 'index']);
 
 $Router->get('/login', [AuthController::class, 'login']);
-$Router->post('/login', [AuthController::class, 'login']);
+$Router->post('/login', [AuthController::class, 'authenticate']);
 $Router->get('/logout', [AuthController::class, 'logout']);
 
 $Router->apiGet('/api/datos', [APIController::class, 'obtenerDatos']);
