@@ -6,6 +6,7 @@ require_once __DIR__ . '/../models/Usuario.php';
 
 class AuthController {
   public static function login(Router $Router, array $params): void {
+    AuthService::requireGuest();
     $Router->render('pages/login', [], false);
   }
 
