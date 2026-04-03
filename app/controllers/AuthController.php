@@ -32,8 +32,7 @@ class AuthController {
   }
 
   public static function register(Router $Router): void {
-  
-
+    AuthService::requireGuest();
     $Router->render('/pages/register', [], false);
   }
 
