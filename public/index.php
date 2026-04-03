@@ -37,6 +37,7 @@ $Router->post('/login', [AuthController::class, 'authenticate']);
 $Router->get('/logout', [AuthController::class, 'logout']);
 
 $Router->get('/register', [AuthController::class, 'register']);
+$Router->post('/register', [AuthController::class, 'createUser']);
 
 $Router->apiGet('/api/datos', [APIController::class, 'obtenerDatos']);
 

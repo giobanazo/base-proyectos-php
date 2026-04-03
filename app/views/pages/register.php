@@ -5,9 +5,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Crear cuenta</title>
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-    rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    #alert-flash-container {
+      margin-bottom: 1rem;
+    }
+
+    #alert-flash-container p {
+      background-color: rgb(255, 0, 0);
+      padding: .3rem .5rem;
+      margin-bottom: .5rem;
+      color: #fff;
+      border-radius: .3rem;
+    }
+  </style>
 </head>
 
 <body class="bg-light">
@@ -17,29 +28,37 @@
       <div class="col-sm-8 col-md-6 col-lg-4">
 
         <div class="card mt-4">
-          <div class="card-body p-4">
 
+          <div class="card-body p-4">
             <h4 class="card-title mb-4">Crear cuenta</h4>
+
+            <?php if ($alertas = getFlash()): ?>
+              <div id="alert-flash-container">
+                <?php foreach ($alertas as $alerta): ?>
+                  <p><?= $alerta['mensaje'] ?></p>
+                <?php endforeach ?>
+              </div>
+            <?php endif ?>
 
             <form action="/register" method="POST">
               <div class="mb-3">
                 <label for="usuario" class="form-label">Usuario</label>
-                <input type="text" class="form-control" id="usuario" placeholder="Elige un usuario" />
+                <input type="text" name="usuario" class="form-control" id="usuario" placeholder="Elige un usuario" />
               </div>
 
               <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre</label>
-                <input type="text" class="form-control" id="nombre" placeholder="Ingresa tu nombre completo" />
+                <input type="text" name="nombre" class="form-control" id="nombre" placeholder="Ingresa tu nombre completo" />
               </div>
 
               <div class="mb-3">
                 <label for="email" class="form-label">Correo electrónico</label>
-                <input type="email" class="form-control" id="email" placeholder="ejemplo@correo.com" />
+                <input type="email" name="email" class="form-control" id="email" placeholder="ejemplo@correo.com" />
               </div>
 
               <div class="mb-3">
                 <label for="contrasena" class="form-label">Contraseña</label>
-                <input type="password" class="form-control" id="contrasena" placeholder="Crea una contraseña" />
+                <input type="password" name="password" class="form-control" id="contrasena" placeholder="Crea una contraseña" />
               </div>
 
               <div class="d-grid mb-3">

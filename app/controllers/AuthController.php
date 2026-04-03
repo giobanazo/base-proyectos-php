@@ -36,4 +36,21 @@ class AuthController {
 
     $Router->render('/pages/register', [], false);
   }
+
+
+  public static function createUser(): void {
+    AuthService::requireGuest();
+    $resultado = AuthService::register($_POST['usuario'], $_POST['nombre'], $_POST['email'], $_POST['password']);
+
+    if ($resultado['exitoso']) {
+      setFlash('success', $resultado['mensajes'][0]);
+      header('Location: /login');
+    } else {
+      foreach ($resultado['mensajes'] as $mensaje) {
+        setFlash('danger', $mensaje);
+      }
+      header('Location: /register');
+    }
+    exit();
+  }
 }

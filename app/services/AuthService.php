@@ -51,6 +51,31 @@ class AuthService {
     ];
   }
 
+  public static function register(string $usuario, string $nombre, string $email, string $password): array {
+    $validation = Usuario::validateRegister(['usuario' => $usuario, 'nombre' => $nombre, 'email' => $email, 'password' => $password]);
+
+    if (!$validation['valid']) {
+      return [
+        'exitoso' => false,
+        'mensajes' => $validation['mensajes']
+      ];
+    }
+
+    $resultado = Usuario::create($validation['datos']);
+
+    if (!$resultado) {
+      return [
+        'exitoso' => false,
+        'mensajes' => ['Hubo un problema al crear tu cuenta. ¡Inténtelo más tarde!']
+      ];
+    }
+
+    return [
+      'exitoso' => true,
+      'mensajes' => ['La cuenta se ha creado correctamente.']
+    ];
+  }
+
   public static function isAuthenticated(): bool {
     if (isset($_SESSION['user']) && !empty($_SESSION['user']['id'])) return true;
 

@@ -12,11 +12,18 @@
     }
 
     #alert-flash-container p {
-      background-color: rgb(255, 0, 0);
       padding: .3rem .5rem;
       margin-bottom: .5rem;
       color: #fff;
       border-radius: .3rem;
+    }
+
+    #alert-flash-container .success {
+      background-color: rgb(0, 147, 7);
+    }
+
+    #alert-flash-container .danger {
+      background-color: rgb(255, 0, 0);
     }
   </style>
 </head>
@@ -32,10 +39,10 @@
 
             <h4 class="card-title mb-4">Iniciar sesión</h4>
 
-            <?php if ($errores = getFlash()): ?>
+            <?php if ($alertas = getFlash()): ?>
               <div id="alert-flash-container">
-                <?php foreach ($errores as $error): ?>
-                  <p><?= $error['mensaje'] ?></p>
+                <?php foreach ($alertas as $alerta): ?>
+                  <p class="<?= $alerta['tipo'] ?>"><?= $alerta['mensaje'] ?></p>
                 <?php endforeach ?>
               </div>
             <?php endif ?>
@@ -62,7 +69,7 @@
             </form>
 
             <div class="mt-4 text-center">
-              <p>¿No tienes cuenta? <a href="">Crear cuenta</a></p>
+              <p>¿No tienes cuenta? <a href="/register">Crear cuenta</a></p>
             </div>
           </div>
         </div>
