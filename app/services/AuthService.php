@@ -9,6 +9,7 @@ class AuthService {
       'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
       'ip_address' => $_SERVER['REMOTE_ADDR'] ?? '',
       'expires_at' => date('Y-m-d H:i:s', $oneMonthInUnix),
+      'created_at' => date('Y-m-d H:i:s'),
       'id_usuario' => $idUsuario
     ]);
 
