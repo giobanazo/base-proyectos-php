@@ -47,8 +47,8 @@
 
     if (alertaContainer) {
       setTimeout(() => alertaContainer.classList.add("slide-fade"), 100);      // inicia animación
-      setTimeout(() => alertaContainer.classList.remove("slide-fade"), 4000);  // termina animación
-      setTimeout(() => alertaContainer.remove(), 4800);                        // elimina del DOM
+      setTimeout(() => alertaContainer.classList.remove("slide-fade"), 8000);  // termina animación
+      setTimeout(() => alertaContainer.remove(), 9000);                        // elimina del DOM
     }
   });
 
