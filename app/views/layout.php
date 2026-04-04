@@ -67,12 +67,14 @@
   <?php endif ?>
 </body>
 
-<?php if ($flash = getFlash()): ?>
+<?php if ($alertas = getFlash()): ?>
   <div id="alerta-flash-container">
-    <div class="alert alert-<?= $flash['tipo'] ?> alert-dismissible" role="alert">
-      <?= htmlspecialchars($flash['mensaje']) ?>
-      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
+    <?php foreach ($alertas as $alerta): ?>
+      <div class="alert alert-<?= $alerta['tipo'] ?> alert-dismissible" role="alert">
+        <?= htmlspecialchars($alerta['mensaje']) ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    <?php endforeach; ?>
   </div>
 <?php endif; ?>
 
