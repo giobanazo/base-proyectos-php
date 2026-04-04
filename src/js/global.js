@@ -1,57 +1,92 @@
 (() => {
-  const e = document.getElementById("sidebar"),
-    o = document.getElementById("header"),
-    n = document.getElementById("mainContent"),
-    t = document.getElementById("overlay"),
-    d = () => 768 >= window.innerWidth;
+  // Elementos del DOM
+  const sidebar      = document.getElementById("sidebar");
+  const header       = document.getElementById("header");
+  const mainContent  = document.getElementById("mainContent");
+  const overlay      = document.getElementById("overlay");
+
+  // Detecta si es pantalla móvil (menor o igual a 768px)
+  const esMobile = () => window.innerWidth <= 768;
+
+  // Toggle del sidebar al hacer click en el botón
   document.getElementById("toggleSidebar").addEventListener("click", () => {
-    d()
-      ? (e.classList.toggle("show"), t.classList.toggle("show"))
-      : (e.classList.toggle("hidden"),
-        o.classList.toggle("expanded"),
-        n.classList.toggle("expanded"));
+    if (esMobile()) {
+      // En móvil: muestra sidebar con overlay
+      sidebar.classList.toggle("show");
+      overlay.classList.toggle("show");
+    } else {
+      // En escritorio: colapsa sidebar y expande header y contenido
+      sidebar.classList.toggle("hidden");
+      header.classList.toggle("expanded");
+      mainContent.classList.toggle("expanded");
+    }
   });
-  const s = () => {
-    d() && (e.classList.remove("show"), t.classList.remove("show"));
+
+  // Cierra el sidebar en móvil
+  const cerrarSidebarMobile = () => {
+    if (esMobile()) {
+      sidebar.classList.remove("show");
+      overlay.classList.remove("show");
+    }
   };
-  (t.addEventListener("click", s),
-    window.addEventListener("resize", () => {
-      d() || (e.classList.remove("show"), t.classList.remove("show"));
-    }),
-    document.addEventListener("DOMContentLoaded", () => {
-      const e = document.getElementById("alerta-flash-container");
-      e &&
-        (setTimeout(() => {
-          e.classList.add("slide-fade");
-        }, 100),
-        setTimeout(() => {
-          e.classList.remove("slide-fade");
-        }, 4e3),
-        setTimeout(() => {
-          e.remove();
-        }, 4800));
-    }),
-    (window.restFetch = async (e, o = "GET", n = null) => {
-      const t = { method: o };
-      n &&
-        ((t.headers = { "Content-Type": "application/json" }),
-        (t.body = JSON.stringify(n)));
-      const d = await fetch(e, t);
-      return await d.json();
-    }),
-    (window.formatearMoneda = (e) => {
-      const o = void 0;
-      return e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }),
-    (window.formatearMonedaInput = (e) => {
-      const o = e.selectionStart,
-        n = e.value;
-      e.value = formatearMoneda(e.value);
-      const t = e.value.length - n.length;
-      e.setSelectionRange(o + t, o + t);
-    }),
-    (window.formatearFecha = (e) => {
-      const [o, n, t] = e.split("-");
-      return `${t}-${n}-${o}`;
-    }));
+
+  // Cierra el sidebar al hacer click en el overlay
+  overlay.addEventListener("click", cerrarSidebarMobile);
+
+  // Cierra el sidebar móvil si se redimensiona a escritorio
+  window.addEventListener("resize", () => {
+    if (!esMobile()) {
+      sidebar.classList.remove("show");
+      overlay.classList.remove("show");
+    }
+  });
+
+  // Maneja las alertas flash con animación
+  document.addEventListener("DOMContentLoaded", () => {
+    const alertaContainer = document.getElementById("alerta-flash-container");
+
+    if (alertaContainer) {
+      setTimeout(() => alertaContainer.classList.add("slide-fade"), 100);      // inicia animación
+      setTimeout(() => alertaContainer.classList.remove("slide-fade"), 4000);  // termina animación
+      setTimeout(() => alertaContainer.remove(), 4800);                        // elimina del DOM
+    }
+  });
+
+  // Función global para hacer peticiones REST con fetch
+  window.restFetch = async (url, method = "GET", body = null) => {
+    const opciones = { method };
+
+    if (body) {
+      opciones.headers = { "Content-Type": "application/json" };
+      opciones.body = JSON.stringify(body);
+    }
+
+    const response = await fetch(url, opciones);
+    return await response.json();
+  };
+
+  // Formatea un número como moneda con puntos (ej: 1.000.000)
+  window.formatearMoneda = (valor) => {
+    return valor
+      .replace(/\D/g, "")                          // elimina todo lo que no sea dígito
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ".");      // agrega puntos cada 3 dígitos
+  };
+
+  // Formatea un input de moneda manteniendo la posición del cursor
+  window.formatearMonedaInput = (input) => {
+    const posicionCursor  = input.selectionStart;
+    const valorAnterior   = input.value;
+
+    input.value = formatearMoneda(input.value);
+
+    const diferencia = input.value.length - valorAnterior.length;
+    input.setSelectionRange(posicionCursor + diferencia, posicionCursor + diferencia);
+  };
+
+  // Convierte fecha de YYYY-MM-DD a DD-MM-YYYY
+  window.formatearFecha = (fecha) => {
+    const [anio, mes, dia] = fecha.split("-");
+    return `${dia}-${mes}-${anio}`;
+  };
+
 })();
