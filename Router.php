@@ -54,32 +54,38 @@ class Router {
     $method = $_SERVER['REQUEST_METHOD'];
     $urlActual = $_SERVER['REQUEST_URI'] ?? '/';
 
-    // Primero buscar en rutas API
-    $isApiRoute = $this->matchRoute($this->apiRoutes, $method, $urlActual, true);
-    
-    // Si no es API, buscar en rutas normales
-    if (!$isApiRoute) {
-      $isNormalRoute = $this->matchRoute($this->routes, $method, $urlActual);
+    if (str_starts_with($urlActual, '/api/')) {
+      header('Content-Type: application/json; charset=utf-8');
       
-      if (!$isNormalRoute) {
+      $isApiRoute = $this->matchRoute($this->apiRoutes, $method, $urlActual);
+
+      if (!$isApiRoute) {
         http_response_code(404);
-        $this->render('pages/404', [], false);
+        echo json_encode([
+          'status' => 'ERROR',
+          'response' => [
+            'mensaje' => 'No existe el endpoint de la API solicitado'
+          ]
+        ]);
       }
+      
+      exit();
+    }
+    
+    $isNormalRoute = $this->matchRoute($this->routes, $method, $urlActual);      
+    if (!$isNormalRoute) {
+      http_response_code(404);
+      $this->render('pages/404', [], false);
     }
   }
 
-  private function matchRoute(array $routes, string $method, string $url, bool $isApi = false): bool {
+  private function matchRoute(array $routes, string $method, string $url): bool {
     foreach ($routes as $route) {
       if ($route['method'] !== $method) continue;
       
       $pattern = $this->convertToRegex($route['url']);
       if (preg_match($pattern, $url, $matches)) {
         array_shift($matches);
-        
-        // Si es API, establecer headers JSON
-        if ($isApi) {
-          header('Content-Type: application/json; charset=utf-8');
-        }
         
         call_user_func_array($route['fn'], [$this, $matches]);
         return true;
