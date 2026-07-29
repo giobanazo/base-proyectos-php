@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-function debuguear(mixed $variable): string {
+function debuguear(mixed $variable): never {
   echo "<pre>";
   var_dump($variable);
   echo "</pre>";
   exit();
 }
 
-function redirect($url) {
+function redirect($url): never {
   header("Location: $url");
   exit();
 }
@@ -50,7 +50,7 @@ function getFlash(): array|null {
   return $flash;
 }
 
-function exportarXLS(string $filename, string $content, bool $download = true): void {
+function exportarXLS(string $filename, string $content, bool $download = true): never {
   $disposition = $download ? 'attachment' : 'inline';
 
   header("Content-Type: application/vnd.ms-excel; charset=UTF-8");
