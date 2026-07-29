@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 class AuthService {
   private static function crearRememberToken(int $idUsuario): void {
     $token = bin2hex(random_bytes(32));
