@@ -8,7 +8,7 @@ function debuguear(mixed $variable): never {
   exit();
 }
 
-function redirect($url): never {
+function redirect(string $url): never {
   header("Location: $url");
   exit();
 }
