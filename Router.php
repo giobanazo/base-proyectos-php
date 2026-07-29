@@ -39,6 +39,10 @@ class Router {
   public function apiPut(string $url, array $fn): void {
     $this->addRoute('PUT', $url, $fn, true);
   }
+
+  public function apiPatch(string $url, array $fn): void {
+    $this->addRoute('PATCH', $url, $fn, true);
+  }
   
   public function apiDelete(string $url, array $fn): void {
     $this->addRoute('DELETE', $url, $fn, true);
