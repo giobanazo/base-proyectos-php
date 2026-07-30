@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 class Usuario extends DB {
-  protected static $tabla = 'usuarios';
+  protected static string $tabla = 'usuarios';
 
   public static function validateLogin(array $datos): array {
     $errores = [];
