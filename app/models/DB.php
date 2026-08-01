@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 class DB {
-  protected static $db;
-  protected static $tabla;
+  protected static ?mysqli $db = null;
+  protected static string $tabla;
 
   public static function initDB(): void {
     self::$db = mysqli_connect(
