@@ -4,7 +4,7 @@ declare(strict_types=1);
 class UserRememberToken extends DB {
   protected static string $tabla = 'user_remember_tokens';
 
-  public static function verificarToken(string $tokenHash): array|null {
+  public static function verificarToken(string $tokenHash): ?array {
     $resultado = self::query('
       SELECT usuarios.id, usuario, nombre, email 
       FROM user_remember_tokens
