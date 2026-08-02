@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 class APIController {
-  private static function send(string $status, string|array $response): void {
+  private static function send(string $status, string|array $response): never {
     echo json_encode(['status' => $status, 'response' => $response]);
     exit;
   }
