@@ -11,7 +11,7 @@ ENV::load(__DIR__ . '/../.env');
 DB::initDB();
 
 
-spl_autoload_register(function ($class): void {
+spl_autoload_register(function (string $class): void {
   $paths = [
     __DIR__ . '/../app/controllers/',
     __DIR__ . '/../app/models/',
