@@ -98,7 +98,7 @@ class Usuario extends DB {
     ];
   }
 
-  public static function findByCredentials(string $user, string $password): array|bool {
+  public static function findByCredentials(string $user, string $password): array|false {
     $resultado = self::find($user, ['id', 'usuario', 'nombre', 'email', 'password'], 'usuario');
 
     if (!$resultado) return false;
