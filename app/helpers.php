@@ -42,7 +42,7 @@ function setFlash(string $tipo, string $mensaje): void {
   ];
 }
 
-function getFlash(): array|null {
+function getFlash(): ?array {
   if (!isset($_SESSION['flash'])) return null;
 
   $flash = $_SESSION['flash'];
